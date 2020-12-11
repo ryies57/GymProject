@@ -1,6 +1,6 @@
 <?php
 
-class client extends Model {
+class client extends ModelCrudRepository {
     private $national_id;
     private $phone_number;
     private $email;
