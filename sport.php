@@ -1,5 +1,5 @@
 <?php
-class sport extends Model {
+class sport extends ModelCrudRepository {
     private $sport_num;
     private $sport_type;
     private $price;
