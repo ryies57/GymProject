@@ -1,6 +1,6 @@
 <?php
 
-class plane extends Model {
+class plane extends ModelCrudRepository {
     
     private $plan_id;
     private $sport_num;
