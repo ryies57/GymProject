@@ -1,0 +1,4 @@
+__constructor(conn,entity_class_name):the established connection is pased to the constructor with the name of the class of entity
+find(obj):object holds the fields and values to search by is passed to this function and an entity of same type that passed to constructor is returned
+findOne(obj):as previous but returns only single result 
+save(obj):takes parameter an entity that we want to save , and it should be same type of the one that passed into constructor
