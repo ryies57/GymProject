@@ -53,8 +53,10 @@ class ModelCrudRepository
 
     public function save($entity)
     { 
+        $id=$entity->getId();
+        $entity->setId(null);
         $params = $this->extractEntityAttributes($entity);
-        $query = $this->generateSaveQuery($entity);
+        $query=$id?$this->generateUpdateQuery($entity,$id):$this->generateSaveQuery($entity);
         $this->stmt = $this->conn->prepare($query);
         $this->bindStmtParams($params);
         $this->execute();
@@ -102,6 +104,17 @@ class ModelCrudRepository
         $query = $query . ")";
         return $query;
     }
+    
+    private function generateUpdateQuery($entity,$identifier){
+        $attributes = (array)$this->extractEntityAttributes($entity);
+        $query="update ".$this->entity_name." SET ";
+        foreach($attributes as $attr=>$value){
+            $query.=$attr."= :".$attr." ,";
+        }
+        $query=substr($query,0,strlen($query)-1);
+        $query.=" WHERE ".$this->entity_name.".id = ".$identifier;
+        return $query;
+    }
 
     private function generateFindQuery($fields)
     {
@@ -116,7 +129,9 @@ class ModelCrudRepository
 
     private function bindStmtParams($params)
     {
-
+        echo"//////////////////////";
+        print_r($this->stmt->queryString);
+        echo "/////////";
         foreach ($params as $param => $value) {
             $this->stmt->bindParam(":" . $param, $params->$param);
         }
@@ -136,6 +151,7 @@ class ModelCrudRepository
         $entity = new $this->entity_name;
         foreach ($rslt as $attr => $value) {
             $setter_method = $this->convertAttributeIntoSetter($attr);
+            
             $entity->$setter_method($value);
         }
         return $entity;
