@@ -9,7 +9,7 @@ class ModelCrudRepository
     private $conn;
     private $stmt;
 
-    function __construct($conn, $entity_name)
+    public function __construct($conn, $entity_name)
     {
         try {
             $this->conn = $conn;
@@ -19,7 +19,7 @@ class ModelCrudRepository
         }
     }
 
-    function  findOne($fields)
+    public function  findOne($fields)
     {
         $table_name = strtolower($this->entity_name);
 
@@ -33,7 +33,7 @@ class ModelCrudRepository
         return $Entity;
     }
 
-    function find($fields)
+    public  function find($fields)
     {
         $table_name = strtolower($this->entity_name);
 
@@ -51,9 +51,8 @@ class ModelCrudRepository
         return $Entities;
     }
 
-    function save($entity)
-    {
-
+    public function save($entity)
+    { 
         $params = $this->extractEntityAttributes($entity);
         $query = $this->generateSaveQuery($entity);
         $this->stmt = $this->conn->prepare($query);
@@ -84,8 +83,10 @@ class ModelCrudRepository
                 // $attributes[strtolower(substr($method,3))]=$entity->$method();
                 $field = strtolower(substr($method, 3));
                 if (null!==$entity->$method())
+                {
                     $attributes->$field = $entity->$method();
-            }
+                }
+                }
         }
         return $attributes;
     }
